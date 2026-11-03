@@ -1,0 +1,9 @@
+server/data
+server/.env
+server/test
+server/tests
+docs
+output
+dist
+*.pdf
+.env

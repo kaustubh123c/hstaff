@@ -1,0 +1,30 @@
+# Persistent full-stack hosting (API + built frontend in one service) — recommended for real data.
+# Render "Blueprint": New + → Blueprint → pick this repo. A persistent disk keeps the SQLite DB and KYC uploads.
+# Alternative: use this service for the API only and keep the frontend on Vercel (set VITE_API_URL there).
+services:
+  - type: web
+    name: hstaff
+    runtime: node
+    plan: starter            # persistent disks need a paid plan
+    buildCommand: npm install && npm run build
+    startCommand: node server/src/index.js
+    healthCheckPath: /api/health
+    disk:
+      name: hstaff-data
+      mountPath: /var/data
+      sizeGB: 2
+    envVars:
+      - { key: NODE_ENV, value: production }
+      - { key: DATA_DIR, value: /var/data }
+      - { key: WEB_DIST_DIR, value: .hstaff-build }
+      - { key: JWT_SECRET, generateValue: true }
+      - { key: QR_SECRET, generateValue: true }
+      - { key: CORS_ORIGIN, value: https://YOUR-APP.vercel.app }   # only needed if the frontend is on Vercel
+      - { key: DEMO_MODE, value: "false" }
+      - { key: GOOGLE_CLIENT_ID, sync: false }
+      - { key: RAZORPAY_KEY_ID, sync: false }
+      - { key: RAZORPAY_KEY_SECRET, sync: false }
+      - { key: RAZORPAY_WEBHOOK_SECRET, sync: false }
+      - { key: TWILIO_ACCOUNT_SID, sync: false }
+      - { key: TWILIO_AUTH_TOKEN, sync: false }
+      - { key: TWILIO_FROM_NUMBER, sync: false }

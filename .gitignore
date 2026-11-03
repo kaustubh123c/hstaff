@@ -1,0 +1,7 @@
+node_modules
+dist
+.hstaff-build
+server/data
+server/.env
+.env
+!.env.example
